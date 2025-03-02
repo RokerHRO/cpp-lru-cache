@@ -26,6 +26,9 @@ public:
 	: _max_size(max_size)
 	{ }
 	
+	lru_cache(const lru_cache<key_t, value_t>&) = delete;
+	void operator=(const lru_cache<key_t, value_t>&) = delete;
+	
 	void put(const key_t& key, const value_t& value)
 	{
 		list.push_front(key_value_pair_t(key, value));
