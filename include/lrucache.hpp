@@ -67,6 +67,12 @@ public:
 		}
 	}
 	
+	void clear()
+	{
+		map.clear();
+		list.clear();
+	}
+	
 	bool exists(const key_t& key) const noexcept
 	{
 		return map.find(key) != map.end();
