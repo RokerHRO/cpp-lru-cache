@@ -37,6 +37,18 @@ public:
 		map[key] = list.begin();
 		trim(_max_size);
 	}
+
+	void put(const key_t& key, value_t&& value)
+	{
+		auto it = map.find(key);
+		list.push_front( key_value_pair_t{key, std::move(value)} );
+		if (it != map.end())
+		{
+			list.erase(it->second);
+		}
+		map[key] = list.begin();
+		trim(_max_size);
+	}
 	
 	const value_t& get(const key_t& key)
 	{
