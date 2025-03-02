@@ -28,24 +28,16 @@ public:
 	
 	void put(const key_t& key, const value_t& value)
 	{
-		auto it = map.find(key);
 		list.push_front(key_value_pair_t(key, value));
-		if (it != map.end())
-		{
-			list.erase(it->second);
-		}
+		remove(key);
 		map[key] = list.begin();
 		trim(_max_size);
 	}
 
 	void put(const key_t& key, value_t&& value)
 	{
-		auto it = map.find(key);
 		list.push_front( key_value_pair_t{key, std::move(value)} );
-		if (it != map.end())
-		{
-			list.erase(it->second);
-		}
+		remove(key);
 		map[key] = list.begin();
 		trim(_max_size);
 	}
@@ -59,6 +51,16 @@ public:
 		} else {
 			list.splice(list.begin(), list, it->second);
 			return it->second->second;
+		}
+	}
+	
+	void remove(const key_t& key)
+	{
+		auto it = map.find(key);
+		if( it!= map.end() )
+		{
+			list.erase(it->second);
+			map.erase(it);
 		}
 	}
 	
