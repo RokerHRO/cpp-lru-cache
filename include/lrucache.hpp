@@ -5,8 +5,8 @@
  * Created on June 20, 2013, 5:09 PM, edited 2024-03-02 by LR
  */
 
-#ifndef _LRUCACHE_HPP_INCLUDED_
-#define	_LRUCACHE_HPP_INCLUDED_
+#ifndef LRU_CACHE_HPP_INCLUDED_
+#define LRU_CACHE_HPP_INCLUDED_
 
 #include <unordered_map>
 #include <list>
@@ -43,6 +43,17 @@ public:
 		remove(key);
 		map[key] = list.begin();
 		trim(_max_size);
+	}
+	
+	// just move the key's element to front of list
+	void touch(const key_t& key)
+	{
+		auto it = map.find(key);
+		if(it != map.end() && it->second != list.begin())
+		{
+			list.splice(list.begin(), list, it->second);
+			map.insert(it, key_value_pair_t{key, list.begin()} );
+		}
 	}
 	
 	const value_t& get(const key_t& key)
@@ -109,5 +120,5 @@ private:
 
 } // namespace cache
 
-#endif	/* _LRUCACHE_HPP_INCLUDED_ */
+#endif	/* LRU_CACHE_HPP_INCLUDED_ */
 
