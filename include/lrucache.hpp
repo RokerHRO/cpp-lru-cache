@@ -35,13 +35,7 @@ public:
 			list.erase(it->second);
 		}
 		map[key] = list.begin();
-		
-		if (map.size() > _max_size)
-		{
-			auto last = list.rbegin();
-			map.erase(last->first);
-			list.pop_back();
-		}
+		trim(_max_size);
 	}
 	
 	const value_t& get(const key_t& key)
@@ -63,10 +57,31 @@ public:
 	
 	size_t size() const noexcept { return map.size(); }
 	
+	size_t max_size() const noexcept { return max_size(); }
+	
+	void max_size(size_t new_max_size)
+	{
+		if(new_max_size<_max_size)
+		{
+			trim(new_max_size);
+		}
+		_max_size = new_max_size;
+	}
+	
 private:
 	std::list<key_value_pair_t> list;
 	std::unordered_map<key_t, list_iterator_t> map;
 	size_t _max_size;
+	
+	void trim(size_t allowed_size)
+	{
+		while(map.size() > allowed_size)
+		{
+			auto last = list.rbegin();
+			map.erase(last->first);
+			list.pop_back();
+		}
+	}
 };
 
 } // namespace cache
